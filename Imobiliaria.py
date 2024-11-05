@@ -1,14 +1,15 @@
-# Primeiro Projeto real - Cliente Imobiliaria
+# Primeiro Projeto real - Cliente Imobiliaria - Consiste em um sistema que EMITE O RECIBO de forma automática na impressora que tiver conectado no pc.
+
 # instalar bibilioteca PDF para chamar impressora = pip install fpdf2
 from fpdf import FPDF
-# Instalar biblioteca TK personalizada = pip install customtkinter
+# Instalar biblioteca TK   personalizada = pip install customtkinter
 import tkinter as tk
 from turtle import title
 
 # Gerenciador de banco de Dados
 import sqlite3
 
-# Bibliotecas para manipular Dados e Planilhas
+# Bibliotecas para manipular dados
 import pandas as pd
 
 
@@ -18,15 +19,18 @@ conexao = sqlite3.connect('clientes.db')
 # # Criando o cursor obrigatorio para haver conexao banco:
 c = conexao.cursor()
 #######################################################################################################
-
 # TELA LOGIN
 import customtkinter as ctk
 
-# Inicializar a aplicação e definir o tema e cor
+# Inicializar a aplicação e definir a cor do tema
+#ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
+#ctk.set_default_color_theme("green")  # Themes: "blue" (standard), "green", "dark-blue"   
+
+
+# Inicializar a aplicação e definir o tema
 ctk.set_appearance_mode("System")
 ctk.set_default_color_theme("green")
 
-# Importar o Customtkinter para Janelas virem o tema acima
 import customtkinter as ctk
 # Criar a janela principal
 Login = ctk.CTk()
@@ -34,22 +38,20 @@ Login.geometry("300x200")
 Login.title("Sistema Recibo - V2024")
 Login.resizable(False, False)
 
-# Criar os campos de entrada do Usuario e Senha
+# Criar os campos de entrada
 username_entry = ctk.CTkEntry(master=Login, placeholder_text="Nome de usuário")
 password_entry = ctk.CTkEntry(master=Login, placeholder_text="Senha", show="*")
 
-# Criado função para o LOGIN para inserir usuario e senha
+# Criar o botão de login
 def login():
-   
     username = username_entry.get()
     password = password_entry.get()
-  
 
     # Simulação de verificação de credenciais
     if username == "1" and password == "1":
         # Destruir a janela de login
         Login.destroy()
-     
+
         # Criar uma nova janela (tela principal)
         ########################################################################################################################################
         import customtkinter
@@ -57,43 +59,43 @@ def login():
         customtkinter.set_default_color_theme("dark-blue")
 
         App = customtkinter.CTk()
-        App.title("GERADOR RECIBOS IMOBILIARIA - V_2024")
+        App.title("GERADOR DE RECIBOS IMOBILIARIA - V1_2024")
         App.geometry("400x560")
         App.resizable(False, False)
         App.iconbitmap("icon.ico")
 
         # Adicionar elementos à nova janela
- ######################################################################################################################################################       
-#         def gerar_pdf():
+        
+        def gerar_pdf():
 
-#             nome_empresa = "IMOBILIARIA LIDER"
-#             cpf_cnpj = "10.605.092/0001-97"
+            nome_empresa = "IMOBILIARIA LIDER"
+            cpf_cnpj = "11574840000184"
 
-#             label_nome = "JOAO DA SILVA"
-#             label_cnpj = "89748239004"
+            label_nome = "JOAO DA SILVA"
+            label_cnpj = "89748239004"
 
-#             label_valor = 2350.50
-#             label_formaPag = "EM DINHEIRO"
-#             referente = "AO ALUGUEL DO MES VIGENTE"
-#             import datetime
-#             texto_recibo = f"Pelo presente recibo, eu {nome_empresa}, inscrito no {cpf_cnpj}, declara que RECEBEU na data de Hoje, o valor de {label_valor}, por meio de pagamento em {label_formaPag}\
-# , de {label_nome}, inscrito no cpf {label_cnpj}, referente a {referente}."
-#             print(texto_recibo)
+            label_valor = 2350.50
+            label_formaPag = "EM DINHEIRO"
+            referente = "AO ALUGUEL DO MES VIGENTE"
+
+            texto_recibo = f"Pelo presente recibo, eu {nome_empresa}, inscrito no {cpf_cnpj}, declaro que RECEBI na data de Hoje, o valor de {label_valor}, por meio de pagamento em {label_formaPag}\
+    , de {label_nome}, inscrito no cpf {label_cnpj}, referente a {referente}."
+            print(texto_recibo)
     
-#             pdf = FPDF()
-#             pdf.add_page()
-#             pdf.image('logo.png', 90, 8, 33)
-#             pdf.ln(40)
-#             pdf.set_font("times", "B", 20)
-#             pdf.cell(40, 10, "RECIBO")
+            pdf = FPDF()
+            pdf.add_page()
+            pdf.image('logo1.png', 90, 8, 33)
+            pdf.ln(40)
+            pdf.set_font("times", "B", 20)
+            pdf.cell(40, 10, "RECIBO")
 
-#             pdf.ln(10)
+            pdf.ln(10)
 
-#             pdf.multi_cell(200, 10, texto_recibo)
+            pdf.multi_cell(200, 10, texto_recibo)
           
     
-#             pdf.output("impressao_recibo.pdf")
-##############################################################################################################################################
+            pdf.output("impressao_recibo.pdf")
+
 # FUNÇAO PARA CADASTRAR OS DADOS DO RECIBO DOS CLIENTES NO BANCO DE DADOS(FUNCIONANDO(OK)
 
         def cadastrar_cliente():
@@ -137,61 +139,20 @@ def login():
             c = conexao.cursor()
 
             c.execute("SELECT * FROM clientes")
-            recibos_clientes = c.fetchall()
-            print(recibos_clientes)
-            clientes_recibos=pd.DataFrame(recibos_clientes, columns=['nome','cnpj','valor','telefone','formaPag','dataEmissao','referente','observacao'])
-            recibos_clientes.to_excel('Recibos_Clientes.xlsx')
-            print(recibos_clientes)
+            clientes_cadastrados = c.fetchall()
+            print(clientes_cadastrados)
+            clientes_cadastrados=pd.DataFrame(clientes_cadastrados, columns=['nome','cnpj','valor','telefone','formaPag','dataEmissao','referente','observacao'])
+            clientes_cadastrados.to_excel('Recibos_Clientes.xlsx')
 
     # Commit as mudanças:
             conexao.commit()
 
     # Fechar o banco de dados:
             conexao.close()
-#########################################################################################################################################################################
-        from fpdf import FPDF
-        import datetime
-
-        def gerar_pdf(recibos_clientes):
-            pdf = FPDF()
-            pdf.add_page()
-            pdf.image('logo.png', 90, 8, 33)
-
-            pdf.set_font("Times", "B", 16)
-            pdf.cell(0, 10, "RECIBO", align='C', ln=True)
-
-            pdf.set_font("Times", size=12)
-            pdf.ln(10)
-            pdf.cell(40, 10, f"Data: {datetime.date.today()}")
-
-            pdf.ln(10)
-            pdf.multi_cell(0, 10, f"Pelo presente recibo, eu {recibos_clientes['nome_empresa']}, inscrito no {recibos_clientes['cnpj']}, declaro que RECEBEU na data de hoje, o valor de R$ {recibos_clientes['valor']:.2f}, por meio de pagamento em {recibos_clientes['formaPag']}, de {recibos_clientes['nome']}, inscrito no CPF {recibos_clientes['cpfCnpj']}, referente a {recibos_clientes['referente']}.")
-    
-            if recibos_clientes.get("observacao"):
-                pdf.ln(10)
-                pdf.multi_cell(0, 10, f"Observação: {recibos_clientes['observacao']}")
-
-            pdf.output("recibo.pdf")
-
-# Exemplo de uso
-        dados_recibo = {
-            "nome_empresa": "IMOBILIARIA LIDER",
-            "cnpj": "10.605.092/0001-97",
-            "nome": "João Silva",
-            "cpfCnpj": "89748239004",
-            "valor": 2350.50,
-            "formaPag": "Dinheiro",
-            "referente": "Aluguel do mês vigente",
-            "observacao": "Pagável até o dia 10 de cada mês"
-    }
-
-    gerar_pdf(dados_recibo)
-############################################################################################################################################
-
 # Listar em um  GRID, outra Janela os dados dos Recibos dos Clientes(TESTAR PARA APARECER OS DADOS)
-def consulta_clientes():
+        def consulta_clientes():
             janela = tk.Toplevel()
-            janela.title("CONSULTA DE RECIBOS CLIENTES - V_2024")
+            janela.title("CONSULTA DE RECIBOS CLIENTES - V1_2024")
             janela.geometry("1000x850")
             janela.resizable(False, False)
             janela.iconbitmap("icon.ico")
@@ -321,6 +282,7 @@ def consulta_clientes():
         botao_fechar.grid(row=14, column=0, columnspan=2, padx=10, pady=10 , ipadx = 50)
 
 
+
 #############################################################################################
 # Deixar essa funçao para alguma outra coisa que precisar
 #def funcao():
@@ -331,7 +293,7 @@ def consulta_clientes():
     
             janela1 = tk.Toplevel()
             janela1.geometry("1250x250")
-            janela1.title("Recibo Manual - V_2024")
+            janela1.title("Recibo Manual - V1_2024")
             janela1.iconbitmap("icon.ico")
 
             entry_observacao = tk.Entry(janela1, width =150)
@@ -349,7 +311,7 @@ def consulta_clientes():
             label_observacao = tk.Label(janela1, text='DIGITE DADOS RECIBO')
             label_observacao.grid(row=2, column=0, padx=10, pady=10)
 ###############################################################################
-# funçao dentro da JANELA PRINCIPAL - GERADOR DE RECIBOS IMOBILIARIA
+# funçao dentro da ultima janela
             botao_gerar = customtkinter.CTkButton(janela1, text='imprimir', command=gerar_pdf)
             botao_gerar.grid(row=5, column=0,columnspan=2, padx=10, pady=30 , ipadx = 50)
 
@@ -363,18 +325,19 @@ def consulta_clientes():
 ########################################################
                     
                
-# else:
-# label.configure(text="Nome de Usuário ou Senha incorretos!!")
+    else:
+        label.configure(text="Nome de Usuário ou Senha incorretos!!")
 
-        button = ctk.CTkButton(master=Login, text="Login", command=login, fg_color="red")
+button = ctk.CTkButton(master=Login, text="Login", command=login, fg_color="red")
 
 # Criar um rótulo para exibir mensagens
-        label = ctk.CTkLabel(master=Login, text="")
+label = ctk.CTkLabel(master=Login, text="")
 
-# Empacotar os elementos na janela de Login
+# Empacotar os elementos na janela
 username_entry.pack(pady=12, padx=10)
 password_entry.pack(pady=12, padx=10)
 button.pack(pady=12, padx=10)
 label.pack(pady=12, padx=10)
 
 Login.mainloop()
+
